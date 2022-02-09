@@ -13,7 +13,7 @@ public interface ConsoleWriter extends UserWriter {
 
     void writeResult(List<FileCount> fileCountList);
 
-    void writeException(Exception e);
+    void writeException(String message);
 
     void writeMessageAboutDirectory();
 }

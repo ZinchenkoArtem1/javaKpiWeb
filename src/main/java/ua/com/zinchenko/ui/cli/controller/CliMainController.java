@@ -36,17 +36,17 @@ public class CliMainController implements MainController {
                             List<FileCount> fileCounts = keyWordCountInFileAnalyzer.getCountWordForInEachFileRecursively(directory);
                             consoleWriter.writeResult(fileCounts);
                         } catch (RuntimeException e) {
-                            System.out.println(e.getMessage());
+                            consoleWriter.writeException(e.getMessage());
                         }
                     }
                     case 2 -> {
                         consoleWriter.writeEndProgram();
                         isWork = false;
                     }
-                    default -> System.out.println("Bad input");
+                    default -> consoleWriter.writeException("Bad input");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Bad input");
+                consoleWriter.writeException(e.getMessage());
             }
         }
 

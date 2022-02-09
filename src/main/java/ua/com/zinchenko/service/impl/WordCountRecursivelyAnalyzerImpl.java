@@ -5,6 +5,7 @@ import ua.com.zinchenko.service.model.FileCount;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -24,8 +25,8 @@ public class WordCountRecursivelyAnalyzerImpl implements WordCountRecursivelyAna
                 .map(f -> {
                             try {
                                 return f.get();
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
+                            } catch (InterruptedException | ExecutionException e) {
+                                throw new RuntimeException(e.getMessage());
                             }
                         }
                 )
