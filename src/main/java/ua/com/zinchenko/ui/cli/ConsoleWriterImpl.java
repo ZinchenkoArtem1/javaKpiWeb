@@ -1,9 +1,14 @@
 package ua.com.zinchenko.ui.cli;
 
+import ua.com.zinchenko.service.model.FileCount;
+
+import java.util.List;
+
 public class ConsoleWriterImpl implements ConsoleWriter {
 
     @Override
     public void writeMenu() {
+        System.out.println();
         System.out.println("---MENU---");
         System.out.println("1. Input directory for compete task");
         System.out.println("2. Close program");
@@ -16,13 +21,13 @@ public class ConsoleWriterImpl implements ConsoleWriter {
     }
 
     @Override
-    public void writeResult() {
-
+    public void writeResult(List<FileCount> fileCountList) {
+        fileCountList.forEach(fc -> System.out.println("-> file: " + fc.getFilePath() + " : " + fc.getCount()));
     }
 
     @Override
-    public void writeWrongTaskNumberException() {
-        System.out.println("Your input is not valid task number");
+    public void writeException(Exception e) {
+        System.out.println(e.getMessage());
     }
 
     @Override

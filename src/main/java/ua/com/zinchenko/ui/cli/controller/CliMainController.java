@@ -1,17 +1,23 @@
 package ua.com.zinchenko.ui.cli.controller;
 
+import ua.com.zinchenko.service.WordCountRecursivelyAnalyzer;
+import ua.com.zinchenko.service.model.FileCount;
 import ua.com.zinchenko.ui.MainController;
 import ua.com.zinchenko.ui.cli.ConsoleReader;
 import ua.com.zinchenko.ui.cli.ConsoleWriter;
 
+import java.util.List;
+
 public class CliMainController implements MainController {
 
-    ConsoleReader consoleReader;
-    ConsoleWriter consoleWriter;
+    private final ConsoleReader consoleReader;
+    private final ConsoleWriter consoleWriter;
+    private final WordCountRecursivelyAnalyzer keyWordCountInFileAnalyzer;
 
-    public CliMainController(ConsoleReader consoleReader, ConsoleWriter consoleWriter) {
+    public CliMainController(ConsoleReader consoleReader, ConsoleWriter consoleWriter, WordCountRecursivelyAnalyzer keyWordCountInFileAnalyzer) {
         this.consoleReader = consoleReader;
         this.consoleWriter = consoleWriter;
+        this.keyWordCountInFileAnalyzer = keyWordCountInFileAnalyzer;
     }
 
     public void start() {
@@ -26,16 +32,21 @@ public class CliMainController implements MainController {
                     case 1 -> {
                         consoleWriter.writeMessageAboutDirectory();
                         String directory = consoleReader.getDirectory();
-                        System.out.println("directory: " + directory);
+                        try {
+                            List<FileCount> fileCounts = keyWordCountInFileAnalyzer.getCountWordForInEachFileRecursively(directory);
+                            consoleWriter.writeResult(fileCounts);
+                        } catch (RuntimeException e) {
+
+                        }
                     }
                     case 2 -> {
                         consoleWriter.writeEndProgram();
                         isWork = false;
                     }
-                    default -> consoleWriter.writeWrongTaskNumberException();
+                    default -> System.out.println("Bad input");
                 }
             } catch (NumberFormatException e) {
-                consoleWriter.writeWrongTaskNumberException();
+                System.out.println("Bad input");
             }
         }
 
