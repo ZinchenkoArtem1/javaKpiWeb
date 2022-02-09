@@ -36,7 +36,7 @@ public class CliMainController implements MainController {
                             List<FileCount> fileCounts = keyWordCountInFileAnalyzer.getCountWordForInEachFileRecursively(directory);
                             consoleWriter.writeResult(fileCounts);
                         } catch (RuntimeException e) {
-
+                            System.out.println(e.getMessage());
                         }
                     }
                     case 2 -> {

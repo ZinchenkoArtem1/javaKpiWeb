@@ -4,9 +4,7 @@ import ua.com.zinchenko.service.WordCountRecursivelyAnalyzer;
 import ua.com.zinchenko.service.model.FileCount;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -19,16 +17,10 @@ public class WordCountRecursivelyAnalyzerImpl implements WordCountRecursivelyAna
     @Override
     public List<FileCount> getCountWordForInEachFileRecursively(String directoryPath) {
         File file = new File(directoryPath);
-
-        List<String> allDirectories = getAllDirectories(file);
-
-        ExecutorService executorService = Executors.newFixedThreadPool(8);
-
-        List<Future<List<FileCount>>> listFuture = allDirectories.stream()
-                .map(dir -> executorService.submit(new WordCountAnalyzerCallable(dir, FOR_KEY_WORD)))
-                .toList();
-
-        return listFuture.stream()
+        if(!file.exists()) {
+            throw new RuntimeException("File: " +  directoryPath + " doesn't exist");
+        }
+        return getCountWordForInEachFileMultithreading(getAllDirectories(file)).stream()
                 .map(f -> {
                             try {
                                 return f.get();
@@ -39,6 +31,14 @@ public class WordCountRecursivelyAnalyzerImpl implements WordCountRecursivelyAna
                 )
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
+    }
+
+    private List<Future<List<FileCount>>> getCountWordForInEachFileMultithreading(List<String> allDirectories) {
+        ExecutorService executorService = Executors.newFixedThreadPool(8);
+
+        return allDirectories.stream()
+                .map(dir -> executorService.submit(new WordCountAnalyzerCallable(dir, FOR_KEY_WORD)))
+                .toList();
     }
 
     private List<String> getAllDirectories(File parentDirectory) {

@@ -8,24 +8,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
-public class WordCountAnalyzerCallable implements Callable<List<FileCount>> {
-
-    private final String directoryPath;
-    private final String word;
-
-    public WordCountAnalyzerCallable(String directoryPath, String word) {
-        this.directoryPath = directoryPath;
-        this.word = word;
-    }
+public record WordCountAnalyzerCallable(String directoryPath,
+                                        String word) implements Callable<List<FileCount>> {
 
     @Override
     public List<FileCount> call() {
         System.out.println(Thread.currentThread().getName());
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         File directory = new File(directoryPath);
 
         return Arrays.stream(
