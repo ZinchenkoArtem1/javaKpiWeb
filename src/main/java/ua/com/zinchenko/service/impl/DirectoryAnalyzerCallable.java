@@ -1,5 +1,6 @@
 package ua.com.zinchenko.service.impl;
 
+import org.apache.commons.io.FilenameUtils;
 import ua.com.zinchenko.service.model.FileCount;
 
 import java.io.*;
@@ -12,6 +13,7 @@ public final class DirectoryAnalyzerCallable implements Callable<List<FileCount>
 
     private final String directoryPath;
     private final String word;
+    private final static String C_FILE_EXTENSION = "c";
 
     public DirectoryAnalyzerCallable(String directoryPath,
                                      String word) {
@@ -32,7 +34,7 @@ public final class DirectoryAnalyzerCallable implements Callable<List<FileCount>
                                 )
                 )
                 .filter(File::isFile)
-                .filter(f -> f.getName().contains(".c"))
+                .filter(f -> FilenameUtils.isExtension(f.getAbsolutePath(), C_FILE_EXTENSION))
                 .map(file -> new FileCount(
                                 file.getAbsolutePath(),
                                 getForKeyWordCount(file)
