@@ -7,13 +7,7 @@ import java.util.List;
 
 public interface ConsoleWriter extends UserWriter {
 
-    void writeMenu();
-
     void writeEndProgram();
 
     void writeResult(List<FileCount> fileCountList);
-
-    void writeException(String message);
-
-    void writeMessageAboutDirectory();
 }

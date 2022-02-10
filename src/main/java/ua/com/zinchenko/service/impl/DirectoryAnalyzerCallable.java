@@ -8,8 +8,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
-public record WordCountAnalyzerCallable(String directoryPath,
-                                        String word) implements Callable<List<FileCount>> {
+public final class DirectoryAnalyzerCallable implements Callable<List<FileCount>> {
+
+    private final String directoryPath;
+    private final String word;
+
+    public DirectoryAnalyzerCallable(String directoryPath,
+                                     String word) {
+        this.directoryPath = directoryPath;
+        this.word = word;
+    }
 
     @Override
     public List<FileCount> call() {

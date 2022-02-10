@@ -26,7 +26,7 @@ public class ConsoleWriterImpl implements ConsoleWriter {
     }
 
     @Override
-    public void writeException(String message) {
+    public void writeExceptionMessage(String message) {
         System.out.println(message);
     }
 
